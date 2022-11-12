@@ -4,7 +4,6 @@ const router = Router();
 
 router.get('/', async (req, res) => {
 	const courses = await Course.find().populate('userId', 'email name');
-	console.log(courses);
 	res.render('courses', {
 		title: 'Courses',
 		isCourses: true,

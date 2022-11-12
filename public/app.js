@@ -1,43 +1,39 @@
-const toCurrency = price => {
-    return new Intl.NumberFormat('ru-Ru', {
-        currency: 'rub',
-        style: 'currency'
+/* eslint-disable no-undef */
+const toCurrency = price => new Intl.NumberFormat('ru-Ru', {
+	currency: 'rub',
+	style: 'currency',
 
-    }).format(price)
-}
+}).format(price);
 
-document.querySelectorAll('.price').forEach(item =>{
-    item.textContent = toCurrency(item.textContent)
-})
+document.querySelectorAll('.price').forEach(item => {
+	item.textContent = toCurrency(item.textContent);
+});
 
 const $cart = document.querySelector('#cart');
-if($cart){
-    $cart.addEventListener('click', event => {
-        if(event.target.classList.contains('js-remove')){
-            const id = event.target.dataset.id;
+if ($cart) {
+	$cart.addEventListener('click', event => {
+		if (event.target.classList.contains('js-remove')) {
+			const {id} = event.target.dataset;
 
-            fetch(`/cart/remove/${id}`, {
-                method: 'delete'
-            }).then(res => res.json())
-            .then(cart => {
-                if(cart.courses.length){
-                    const html = cart.courses.map(c => {
-                        return `
+			fetch(`/cart/remove/${id}`, {
+				method: 'delete',
+			}).then(res => res.json())
+				.then(cart => {
+					// eslint-disable-next-line space-before-blocks
+					if (cart.courses.length){
+						const html = cart.courses.map(c => `
                         <tr>
                         <td>${c.title}</td>
                         <td>${c.count}</td>
                         <td> <button class="btn btn-small js-remove" data-id="${c.id}">Delete</button></td>
                     </tr>
-                        `
-                    }).join('');
-                    $cart.querySelector('tbody').innerHTML = html;
-                    $cart.querySelector('.price').textContent = toCurrency(cart.price)
-
-                }else{
-                    $cart.innerHTML = '<p>The cart is empty</p>'
-                }
-            })
-
-        }
-    })
+                        `).join('');
+						$cart.querySelector('tbody').innerHTML = html;
+						$cart.querySelector('.price').textContent = toCurrency(cart.price);
+					} else {
+						$cart.innerHTML = '<p>The cart is empty</p>';
+					}
+				});
+		}
+	});
 }
