@@ -1,14 +1,10 @@
-/* eslint-disable no-return-assign */
 const {Router} = require('express');
 const Course = require('../models/Course');
+const computePrices = require('../utils/price');
 const router = Router();
 
 function mapCartItems(cart) {
 	return cart.items.map(item => ({...item.courseId._doc, id: item.courseId.id, count: item.count}));
-}
-
-function computePrices(courses) {
-	return courses.reduce((total, course) => total += course.price * course.count, 0);
 }
 
 router.post('/add', async (req, res) => {

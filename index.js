@@ -5,6 +5,7 @@ const Handlebars = require('handlebars');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
 const homeRoute = require('./routes/home');
 const coursesRoute = require('./routes/courses');
+const ordersRoute = require('./routes/orders');
 const addRoute = require('./routes/add');
 const path = require('path');
 const cartRoute = require('./routes/cart');
@@ -37,6 +38,7 @@ app.use('/', homeRoute);
 app.use('/add', addRoute);
 app.use('/courses', coursesRoute);
 app.use('/cart', cartRoute);
+app.use('/orders', ordersRoute);
 
 async function start() {
 	try {
