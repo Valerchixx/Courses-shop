@@ -7,6 +7,7 @@ const homeRoute = require('./routes/home');
 const coursesRoute = require('./routes/courses');
 const ordersRoute = require('./routes/orders');
 const addRoute = require('./routes/add');
+const authnRoute = require('./routes/login');
 const path = require('path');
 const cartRoute = require('./routes/cart');
 const User = require('./models/User');
@@ -39,6 +40,7 @@ app.use('/add', addRoute);
 app.use('/courses', coursesRoute);
 app.use('/cart', cartRoute);
 app.use('/orders', ordersRoute);
+app.use('/auth', authnRoute);
 
 async function start() {
 	try {
