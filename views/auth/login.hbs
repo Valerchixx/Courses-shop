@@ -3,7 +3,7 @@
         <div class="col s12">
         <ul class="tabs">
             <li class="tab col s6"><a href="#login">login</a></li>
-            <li class="tab col s6"><a class="active" href="#registr">registration</a></li>
+            <li class="tab col s6"><a class="active" href="#register">registration</a></li>
         </ul>
         </div>
         <div id="login" class="col s6 offset-s3">
@@ -15,23 +15,23 @@
                     <span class="helper-text" data-error="enter email"></span>
                 </div>
             <div class="input-field col s12">
-                <input placeholder="Enter password" id="password" name="passsword" type="password" required class="validate">
+                <input placeholder="Enter password" id="password" name="password" type="password" required class="validate">
                 <label for="password">Password</label>
                 <span class="helper-text" data-error="enter password"></span>
                 </div>
             <button class="btn btn-primary" type="submit">Login</button>
             </form>
         </div>
-        <div id="registr" class="col s6 offset-s3">
+        <div id="register" class="col s6 offset-s3">
                   <h1>Create account</h1>
-            <form action="/auth/login" method="post">
+            <form action="/auth/register" method="post">
             <div class="input-field col s12">
                     <input placeholder="Enter email" id="remail" name="email" type="email" required class="validate">
                     <label for="remail">Email</label>
                     <span class="helper-text" data-error="enter email"></span>
                 </div>
             <div class="input-field col s12">
-                <input placeholder="Enter password" id="rpassword" name="passsword" type="password" required class="validate">
+                <input placeholder="Enter password" id="rpassword" name="password" type="password" required class="validate">
                 <label for="rpassword">Password</label>
                 <span class="helper-text" data-error="enter password"></span>
                 </div>
@@ -40,6 +40,12 @@
                 <input placeholder="Enter password again" id="confirm" name="confirm" type="password" required class="validate">
                 <label for="confirm">Password</label>
                 <span class="helper-text" data-error="enter password"></span>
+                </div>
+
+                <div class="input-field col s12">
+                <input placeholder="Enter your name" id="name" name="name" type="text" required class="validate">
+                <label for="name">Name</label>
+                <span class="helper-text" data-error="enter your name"></span>
                 </div>
             <button class="btn btn-primary" type="submit">Registrate</button>
             </form>
