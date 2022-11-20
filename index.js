@@ -2,9 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const exhbs = require('express-handlebars');
 const session = require('express-session');
+const MongoStore = require('connect-mongodb-session')(session);
 const Handlebars = require('handlebars');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
-const User = require('./models/User');
 const homeRoute = require('./routes/home');
 const coursesRoute = require('./routes/courses');
 const ordersRoute = require('./routes/orders');
@@ -13,6 +13,8 @@ const authnRoute = require('./routes/login');
 const path = require('path');
 const cartRoute = require('./routes/cart');
 const varMiddleware = require('./middleware/variable');
+const userMiddleware = require('./middleware/user');
+const MONGODB_URI = 'mongodb+srv://Lera:UydvyTymKQ7Y9t2Z@cluster.ezqdjlb.mongodb.net/shop';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -23,6 +25,10 @@ const hbs = exhbs.create({
 	handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 
+const store = new MongoStore({
+	collection: 'sessions',
+	uri: MONGODB_URI,
+});
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
@@ -31,18 +37,20 @@ app.use(session({
 	secret: 'some secret',
 	resave: false,
 	saveUninitialized: false,
+	store,
 }));
 app.use(varMiddleware);
+app.use(userMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(async (req, res, next) => {
-	try {
-		const user = await User.findById('636be0fea700fb6b8b84d0d3');
-		req.user = user;
-		next();
-	} catch (e) {
-		console.log(e);
-	}
-});
+// App.use(async (req, res, next) => {
+// 	try {
+// 		const user = await User.findById('636be0fea700fb6b8b84d0d3');
+// 		req.user = user;
+// 		next();
+// 	} catch (e) {
+// 		console.log(e);
+// 	}
+// });
 app.use('/', homeRoute);
 app.use('/add', addRoute);
 app.use('/courses', coursesRoute);
@@ -52,19 +60,18 @@ app.use('/auth', authnRoute);
 
 async function start() {
 	try {
-		const url = 'mongodb+srv://Lera:UydvyTymKQ7Y9t2Z@cluster.ezqdjlb.mongodb.net/shop';
-		await mongoose.connect(url, {
+		await mongoose.connect(MONGODB_URI, {
 			useNewUrlParser: true,
 		});
-		const candidate = await User.findOne();
-		if (!candidate) {
-			const user = new User({
-				email: 'vproshahcenko@gmail.com',
-				name: 'Lera',
-				cart: {items: []},
-			});
-			await user.save();
-		}
+		// Const candidate = await User.findOne();
+		// if (!candidate) {
+		// 	const user = new User({
+		// 		email: 'vproshahcenko@gmail.com',
+		// 		name: 'Lera',
+		// 		cart: {items: []},
+		// 	});
+		// 	await user.save();
+		// }
 
 		app.listen(PORT, () => {
 			console.log(`Server is listening on port: ${PORT}`);
