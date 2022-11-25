@@ -27,18 +27,21 @@ if ($cart) {
 	$cart.addEventListener('click', event => {
 		if (event.target.classList.contains('js-remove')) {
 			const {id} = event.target.dataset;
+			const {csrf} = event.target.dataset;
 
 			fetch(`/cart/remove/${id}`, {
 				method: 'delete',
+				headers: {
+					'X-XSRF-TOKEN': csrf,
+				},
 			}).then(res => res.json())
 				.then(cart => {
-					// eslint-disable-next-line space-before-blocks
-					if (cart.courses.length){
+					if (cart.courses.length) {
 						const html = cart.courses.map(c => `
                         <tr>
                         <td>${c.title}</td>
                         <td>${c.count}</td>
-                        <td> <button class="btn btn-small js-remove" data-id="${c.id}">Delete</button></td>
+                        <td> <button class="btn btn-small js-remove" data-id="${c.id}" data-csrf="${csrf}">Delete</button></td>
                     </tr>
                         `).join('');
 						$cart.querySelector('tbody').innerHTML = html;

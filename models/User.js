@@ -63,6 +63,13 @@ userSchema.methods.removeFromCart = function (id) {
 	return this.save();
 };
 
+userSchema.methods.removeInvalid = function (id) {
+	let items = [...this.cart.items];
+	items = items.filter(item => item._id.toString() !== id.toString());
+	this.cart = {items};
+	return this.save();
+};
+
 userSchema.methods.cleanCart = function () {
 	this.cart = {items: []};
 	return this.save();

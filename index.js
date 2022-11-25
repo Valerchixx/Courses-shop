@@ -4,6 +4,8 @@ const exhbs = require('express-handlebars');
 const session = require('express-session');
 const MongoStore = require('connect-mongodb-session')(session);
 const Handlebars = require('handlebars');
+const csrf = require('csurf');
+const flash = require('connect-flash');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
 const homeRoute = require('./routes/home');
 const coursesRoute = require('./routes/courses');
@@ -39,6 +41,8 @@ app.use(session({
 	saveUninitialized: false,
 	store,
 }));
+app.use(csrf());
+app.use(flash());
 app.use(varMiddleware);
 app.use(userMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));

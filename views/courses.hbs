@@ -19,6 +19,7 @@
            <form action="/cart/add" method="POST">
               <input type="hidden" name="id" value="{{id}}">
               <button type="submit" class="btn btn-primary">Buy</button>
+              <input type="hidden" name="_csrf" value="{{@root.csrf}}">
            </form>
            {{/if}}
         </div>

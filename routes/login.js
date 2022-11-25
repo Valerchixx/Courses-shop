@@ -7,6 +7,8 @@ router.get('/login', async (req, res) => {
 	res.render('../views/auth/login.hbs', {
 		titlle: 'Authorisation',
 		isLogin: true,
+		loginError: req.flash('loginError'),
+		registerError: req.flash('registerError'),
 	});
 });
 
@@ -33,9 +35,11 @@ router.post('/login', async (req, res) => {
 					res.redirect('/');
 				});
 			} else {
+				req.flash('loginError', 'Passwords are not matched');
 				res.redirect('/auth/login#login');
 			}
 		} else {
+			req.flash('loginError', 'User with this name doesn\'t exist');
 			res.redirect('/auth/login#login');
 		}
 	} catch (error) {
@@ -48,7 +52,8 @@ router.post('/register', async (req, res) => {
 		const {email, password, name} = req.body;
 		const candidate = await User.findOne({email});
 		if (candidate) {
-			res.redirect('/auth/login#login');
+			req.flash('registerError', 'User with this name already exist');
+			res.redirect('/auth/login#register');
 		} else {
 			const hashpass = await bcrypt.hash(password, 10);
 			const user = new User({
