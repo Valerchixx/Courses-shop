@@ -16,7 +16,7 @@ const path = require('path');
 const cartRoute = require('./routes/cart');
 const varMiddleware = require('./middleware/variable');
 const userMiddleware = require('./middleware/user');
-const MONGODB_URI = 'mongodb+srv://Lera:UydvyTymKQ7Y9t2Z@cluster.ezqdjlb.mongodb.net/shop';
+const keys = require('./keys');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -29,14 +29,14 @@ const hbs = exhbs.create({
 
 const store = new MongoStore({
 	collection: 'sessions',
-	uri: MONGODB_URI,
+	uri: keys.MONGODB_URI,
 });
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
 app.use(express.urlencoded({extended: true}));
 app.use(session({
-	secret: 'some secret',
+	secret: keys.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false,
 	store,
@@ -64,7 +64,7 @@ app.use('/auth', authnRoute);
 
 async function start() {
 	try {
-		await mongoose.connect(MONGODB_URI, {
+		await mongoose.connect(keys.MONGODB_URI, {
 			useNewUrlParser: true,
 		});
 		// Const candidate = await User.findOne();
